@@ -1,9 +1,15 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { CartProduct } from "./CartProduct";
+import { emptyCartThunk } from "../../thunkActionsCreator/cartThunks";
 
 export default function Cart() {
   const items = useSelector((state) => state.cart.items);
   const totals = useSelector((state) => state.cart.totals);
+  const dispatch = useDispatch();
+
+  const emptyCart = () => {
+    dispatch(emptyCartThunk());
+  };
 
   return (
     <>
@@ -13,7 +19,7 @@ export default function Cart() {
           <CartProduct key={item.key} item={item} />
         ))}
       </ul>
-      <button>Vider Panier</button>
+      <button onClick={() => emptyCart()}>Vider Panier</button>
       <button>Payer</button>
     </>
   );

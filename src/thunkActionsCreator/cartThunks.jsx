@@ -24,6 +24,44 @@ export const initializeCartThunk = createAsyncThunk(
   },
 );
 
+export const emptyCartThunk = createAsyncThunk(
+  "cart/empty",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const currentNonce = state.cart.nonce;
+
+    if (!currentNonce) {
+      throw new Error("Jeton de session manquant.");
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/items`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Nonce: currentNonce,
+          },
+        },
+      );
+      if (!response.ok) {
+        throw new Error("Impossible de récupérer le panier initial.");
+      }
+      const serverNonce = response.headers.get("Nonce");
+      if (serverNonce) {
+        thunkAPI.dispatch(setNonce(serverNonce));
+      }
+      const cartData = await response.json();
+      cartData.items = [];
+      thunkAPI.dispatch(setCart(cartData));
+      return cartData;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
 export const addProductToCart = createAsyncThunk(
   "cart/addProduct",
   async ({ productId, quantity, variation = [] }, thunkAPI) => {
@@ -75,7 +113,7 @@ export const deleteProductFromCart = createAsyncThunk(
       if (!currentNonce) {
         throw new Error("Jeton de session manquant.");
       }
-      console.log(itemKey);
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/cart/remove-item`,
         {
