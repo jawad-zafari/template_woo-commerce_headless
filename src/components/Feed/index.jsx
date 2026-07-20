@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchProductsThunk } from "../../thunkActionsCreator/productsThunks";
 import { fetchCategoriesThunk } from "../../thunkActionsCreator/categoriesThunks";
+import { Link } from "react-router-dom";
 
 export default function Feed() {
   const dispatch = useDispatch();
@@ -57,9 +58,18 @@ export default function Feed() {
     <div className="feed-container">
       <span ref={feedContainerRef}></span>
       {items.map((product) => (
-        <div key={product.id}>
+        <div key={product.id} className="product-card">
           <p>{product.name}</p>
-          <img src={product.images[0]?.src} alt={product.name} />
+          
+          {/* Le lien vers la page de détails du produit */}
+          <Link to={`/product/${product.id}`}>
+            <img src={product.images[0]?.src} alt={product.name} />
+          </Link>
+          
+          {/* Bouton détails */}
+          <Link to={`/product/${product.id}`} className="view-details-btn">
+            Voir les détails
+          </Link>
         </div>
       ))}
       {hasMore && !loading && (
