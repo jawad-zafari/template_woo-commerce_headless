@@ -1,0 +1,14 @@
+.home-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.home-slider-product {
+  text-align: center;
+}
+
+.home-slider-product img {
+  max-width: 300px;
+}
