@@ -11,11 +11,19 @@ export function CartProduct({ item }) {
   return (
     <li style={{ display: "flex", gap: "10px" }}>
       <img
-        src={item.images[0].thumbnail}
+        src={
+          item.images?.[0]?.thumbnail ||
+          "https://placeholder.pics/svg/300/DEDEDE/555555/Produit%20sans%20illustration"
+        }
         style={{ width: "100px", height: "100px" }}
       ></img>
-      <p>{item.name}</p>
-      <span dangerouslySetInnerHTML={{ __html: item.short_description }}></span>
+      <p>{item.name || "produit sans nom"}</p>
+      <span
+        dangerouslySetInnerHTML={{
+          __html:
+            item.short_description || item.description || "pas de description",
+        }}
+      ></span>
       <p>{item.quantity}</p>
       <button
         onClick={() => {
