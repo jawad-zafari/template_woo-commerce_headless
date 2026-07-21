@@ -52,7 +52,6 @@ export const fetchProductByIdThunk = createAsyncThunk(
   "products/fetchById",
   async (productId, thunkAPI) => {
     try {
-      // Utilisation de la même structure d'URL que votre API
       const url = `${import.meta.env.VITE_API_URL}/wp-json/wc/store/v1/products/${productId}`;
       
       const response = await fetch(url, {
@@ -61,11 +60,15 @@ export const fetchProductByIdThunk = createAsyncThunk(
       });
       
       if (!response.ok) {
-        throw new Error("Impossible de récupérer le produit.");
+        // Capture du message d'erreur réel de WooCommerce s'il existe
+        const errorData = await response.json().catch(() => ({}));
+        const serverMessage = errorData.message || "Impossible de récupérer le produit.";
+        throw new Error(serverMessage);
       }
       
       const data = await response.json();
       return data;
+      
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
