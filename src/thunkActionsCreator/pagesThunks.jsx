@@ -6,7 +6,9 @@ export const fetchPageThunk = createAsyncThunk(
     try {
       const slug = typeof params === "string" ? params : params && params.slug;
       if (!slug) {
-        return thunkAPI.rejectWithValue("No slug provided for page fetch.");
+        return thunkAPI.rejectWithValue(
+          "Le slug de la page est requis pour récupérer la page.",
+        );
       }
 
       const state = thunkAPI.getState();
