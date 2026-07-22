@@ -7,7 +7,6 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer_grid">
-
         <div className="footer_col">
           <ul className="footer_links">
             <li><Link to="/catalogue">Acceuil</Link></li>
