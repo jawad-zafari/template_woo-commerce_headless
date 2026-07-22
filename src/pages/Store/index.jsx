@@ -1,10 +1,10 @@
 import Feed from "../../components/Feed";
-import Cart from "../../components/Cart";
+import Filters from "../../components/Filters";
 
 export default function Store() {
   return (
     <div>
-      <Cart></Cart>
+      <Filters />
       <Feed></Feed>
     </div>
   );
