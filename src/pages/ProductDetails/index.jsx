@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; 
+import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Importation des actions (thunks)
@@ -9,20 +9,22 @@ import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
 export default function ProductDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { list, singleProduct, loadingSingle, errorSingle } = useSelector(
-    (state) => state.products
+    (state) => state.products,
   );
 
-  const productFromList = list?.data?.find(p => p.id.toString() === id.toString());
+  const productFromList = list?.data?.find(
+    (p) => p.id.toString() === id.toString(),
+  );
   const productToDisplay = productFromList || singleProduct;
 
   useEffect(() => {
     if (id && !productFromList) {
       dispatch(fetchProductByIdThunk(id));
     }
-  }, [id, dispatch, productFromList]);
+  }, [id, dispatch, productFromList, singleProduct]);
 
   // Fonction pour ajouter ce produit spécifique au panier
   const handleAddToCart = () => {
@@ -32,7 +34,7 @@ export default function ProductDetails() {
           productId: productToDisplay.id,
           quantity: 1,
           variation: [],
-        })
+        }),
       );
     }
   };
@@ -51,7 +53,6 @@ export default function ProductDetails() {
 
   return (
     <div className="product-page-wrapper">
-      
       <button className="back-to-store-btn" onClick={() => navigate(-1)}>
         <i className="fas fa-arrow-left"></i> Retour
       </button>
@@ -59,9 +60,12 @@ export default function ProductDetails() {
       <div className="product-top-block">
         <div className="image-left-side">
           {productToDisplay.images && productToDisplay.images.length > 0 && (
-            <img 
-              src={productToDisplay.images[1]?.src || productToDisplay.images[0]?.src} 
-              alt={productToDisplay.name} 
+            <img
+              src={
+                productToDisplay.images[1]?.src ||
+                productToDisplay.images[0]?.src
+              }
+              alt={productToDisplay.name}
             />
           )}
           <span className="wishlist-heart-decorative">♡</span>
@@ -69,16 +73,20 @@ export default function ProductDetails() {
 
         <div className="main-info-container">
           <h1 dangerouslySetInnerHTML={{ __html: productToDisplay.name }}></h1>
-          
+
           <p className="product-price">
-            {productToDisplay.prices?.price 
-              ? `${(parseFloat(productToDisplay.prices.price) / 100).toFixed(2)} ${productToDisplay.prices.currency_code || 'EUR'}`
+            {productToDisplay.prices?.price
+              ? `${(parseFloat(productToDisplay.prices.price) / 100).toFixed(2)} ${productToDisplay.prices.currency_code || "EUR"}`
               : "Prix non disponible"}
           </p>
 
-          <div 
+          <div
             className="short-description-box"
-            dangerouslySetInnerHTML={{ __html: productToDisplay.short_description || "<p>Aucune introduction disponible.</p>" }}
+            dangerouslySetInnerHTML={{
+              __html:
+                productToDisplay.short_description ||
+                "<p>Aucune introduction disponible.</p>",
+            }}
           />
 
           {/* Le bouton d'ajout au panier est maintenant connecté via onClick */}
@@ -91,9 +99,13 @@ export default function ProductDetails() {
 
       <div className="product-bottom-block">
         <div className="details-content-row">
-          <div 
-            className="text-left-side wordpress-content" 
-            dangerouslySetInnerHTML={{ __html: productToDisplay.description || "<p>Aucune description disponible.</p>" }} 
+          <div
+            className="text-left-side wordpress-content"
+            dangerouslySetInnerHTML={{
+              __html:
+                productToDisplay.description ||
+                "<p>Aucune description disponible.</p>",
+            }}
           />
         </div>
       </div>
