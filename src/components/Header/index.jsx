@@ -25,7 +25,6 @@ export default function Header() {
 
   const handleSearchRedirect = (e) => {
     if (e.key === "Enter") navigate("/catalogue");
-    console.log(e.key);
   };
 
   const closeMenu = () => setMenuOpen(false);

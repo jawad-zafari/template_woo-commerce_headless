@@ -4,18 +4,19 @@ import {
   substractProductFromCart,
 } from "../../thunkActionsCreator/cartThunks";
 import { useDispatch } from "react-redux";
+import "./index.css";
 
 export function CartProduct({ item }) {
   const dispatch = useDispatch();
 
   return (
-    <li style={{ display: "flex", gap: "10px" }}>
+    <li className="cart-product-list">
       <img
+        className="cart-product-thumbnail"
         src={
           item.images?.[0]?.thumbnail ||
           "https://placeholder.pics/svg/300/DEDEDE/555555/Produit%20sans%20illustration"
         }
-        style={{ width: "100px", height: "100px" }}
       ></img>
       <p>{item.name || "produit sans nom"}</p>
       <span

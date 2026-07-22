@@ -55,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/cgu" element={<CGU />} />
         <Route path="/cgv" element={<CGV />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/panier" element={<Cart />} />
         <Route path="/user" element={<User />} />
         <Route path="*" element={<Error404 />} />
       </Routes>

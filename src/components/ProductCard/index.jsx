@@ -1,6 +1,9 @@
 import { addProductToCart } from "../../thunkActionsCreator/cartThunks";
+import { useDispatch } from "react-redux";
 
 export default function ProductCard({ product }) {
+  const dispatch = useDispatch();
+
   const addProduct = (productId, quantity, variation) => {
     dispatch(
       addProductToCart({
