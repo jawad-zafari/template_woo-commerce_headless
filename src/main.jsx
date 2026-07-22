@@ -51,7 +51,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     >
       <Header />
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        {<Route path="/" element={<Home />} /> }
         <Route path="/catalogue" element={<Store />} />
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/cgu" element={<CGU />} />
