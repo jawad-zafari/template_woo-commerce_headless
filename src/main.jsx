@@ -14,6 +14,7 @@ import { userSlice } from "./slices/userSlice";
 import { pagesSlice } from "./slices/pagesSlice";
 
 import { initializeCartThunk } from "./thunkActionsCreator/cartThunks";
+import { fetchCurrentUserThunk } from "./thunkActionsCreator/userThunks";
 
 import Store from "./pages/Store";
 import Login from "./pages/login";
@@ -39,6 +40,10 @@ const store = configureStore({
 });
 
 store.dispatch(initializeCartThunk());
+
+if (store.getState().user.token) {
+  store.dispatch(fetchCurrentUserThunk());
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
