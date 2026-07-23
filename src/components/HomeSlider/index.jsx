@@ -10,6 +10,7 @@ const CARD_WIDTH = 160;
 const GAP = 16;
 const STEP = CARD_WIDTH + GAP;
 const VIEWPORT_WIDTH = CARD_WIDTH * 3 + GAP * 2;
+const MOBILE_QUERY = "(max-width: 768px)";
 
 export default function HomeSlider() {
   const dispatch = useDispatch();
@@ -18,6 +19,9 @@ export default function HomeSlider() {
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [transitionDuration, setTransitionDuration] = useState(0.4);
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia(MOBILE_QUERY).matches,
+  );
   const dragStartX = useRef(0);
   const lastMove = useRef({ x: 0, t: 0 });
   const velocity = useRef(0);
@@ -45,10 +49,20 @@ export default function HomeSlider() {
   const goPrev = () => moveBy(-1);
 
   useEffect(() => {
-    if (total === 0 || isDragging) return;
+    const mql = window.matchMedia(MOBILE_QUERY);
+    const update = () => setIsMobile(mql.matches);
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    // Sur mobile, le défilement horizontal automatique est un dark pattern
+    // (contenu qui bouge sans action de l'utilisateur) : uniquement les
+    // boutons y font avancer le slider.
+    if (total === 0 || isDragging || isMobile) return;
     const interval = setInterval(goNext, 4000);
     return () => clearInterval(interval);
-  }, [total, isDragging]);
+  }, [total, isDragging, isMobile]);
 
   const addProduct = (productId) => {
     dispatch(addProductToCart({ productId, quantity: 1, variation: [] }));
