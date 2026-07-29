@@ -3,8 +3,11 @@ import {
   loginThunk,
   registerThunk,
   fetchCurrentUserThunk,
+  updateCurrentUserThunk,
   fetchCurrentCustomerThunk,
   fetchCurrentUserOrdersThunk,
+  updateCurrentCustomerThunk,
+  deleteCurrentUserThunk,
 } from "../thunkActionsCreator/userThunks";
 
 export const userSlice = createSlice({
@@ -14,7 +17,9 @@ export const userSlice = createSlice({
     customer: null,
     orders: [],
     token:
-      typeof window !== "undefined" ? localStorage.getItem("wc_user_token") : null,
+      typeof window !== "undefined"
+        ? localStorage.getItem("wc_user_token")
+        : null,
     loading: false,
     error: null,
   },
@@ -69,6 +74,18 @@ export const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(updateCurrentUserThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCurrentUserThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = action.payload;
+      })
+      .addCase(updateCurrentUserThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(fetchCurrentCustomerThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -90,6 +107,38 @@ export const userSlice = createSlice({
         state.orders = action.payload;
       })
       .addCase(fetchCurrentUserOrdersThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateCurrentCustomerThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCurrentCustomerThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.customer = action.payload;
+      })
+      .addCase(updateCurrentCustomerThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(deleteCurrentUserThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCurrentUserThunk.fulfilled, (state) => {
+        state.loading = false;
+        // Remet tout l'état utilisateur à zéro (déconnexion automatique)
+        state.token = null;
+        state.profile = null;
+        state.customer = null;
+        state.orders = [];
+        state.error = null;
+
+        localStorage.removeItem("wc_user_token");
+      })
+      .addCase(deleteCurrentUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
